@@ -9,8 +9,12 @@ import (
 
 func TestBitmap(t *testing.T) {
 	t.Logf("MaxBitmapSize -> %d\n", bitmap.MaxBitmapSize)
-	size := rand.Int63n(bitmap.MaxBitmapSize)
+	size := uint64(rand.Int63n(int64(bitmap.MaxBitmapSize)) + 1)
 	bm := bitmap.New(size)
+	s := bm.Size()
+	if s != size {
+		t.Fatalf("wrong size %d", s)
+	}
 	r := bm.SetBit(1, true)
 	if !r || !bm.GetBit(1) {
 		t.Fatalf("wrong value at bit %d", 1)
@@ -26,11 +30,12 @@ func TestBitmap(t *testing.T) {
 }
 
 func BenchmarkBitmap(b *testing.B) {
-	bm := bitmap.New(10000)
-	var index int64
+	x := uint64(10000)
+	bm := bitmap.New(x)
+	var index uint64
 	for i := 0; i < b.N; i++ {
 		index++
-		if index == 10000 {
+		if index == x {
 			index = 0
 		}
 		bm.SetBit(index, !bm.GetBit(index))
