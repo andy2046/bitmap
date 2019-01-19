@@ -15,12 +15,12 @@ func New(size int64) *Bitmap {
 	if size <= 0 || size > MaxBitmapSize {
 		size = MaxBitmapSize
 	}
-	r := size % 8
+	r := size & 7 // size % 8
 	if r != 0 {
 		r = 1
 	}
 	return &Bitmap{
-		data:    make([]byte, size/8+r),
+		data:    make([]byte, (size>>3)+r), // size/8+r
 		bitsize: size,
 	}
 }
@@ -30,7 +30,7 @@ func (b *Bitmap) SetBit(offset int64, v bool) bool {
 	if offset > b.bitsize {
 		return false
 	}
-	index, bit := offset/8, offset%8
+	index, bit := offset>>3, offset&7 // offset/8, offset%8
 	if v {
 		b.data[index] |= 0x01 << uint64(bit)
 	} else {
@@ -44,7 +44,7 @@ func (b *Bitmap) GetBit(offset int64) bool {
 	if offset > b.bitsize {
 		return false
 	}
-	index, bit := offset/8, offset%8
+	index, bit := offset>>3, offset&7 // offset/8, offset%8
 	return (b.data[index]>>uint64(bit))&0x01 != 0
 }
 
