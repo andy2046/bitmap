@@ -27,7 +27,7 @@ func New(size uint64) *Bitmap {
 
 // SetBit sets bit at `offset` to value `v`.
 func (b *Bitmap) SetBit(offset uint64, v bool) bool {
-	if offset > b.bitsize {
+	if offset >= b.bitsize {
 		return false
 	}
 	index, bit := offset>>3, offset&7 // offset/8, offset%8
@@ -41,7 +41,7 @@ func (b *Bitmap) SetBit(offset uint64, v bool) bool {
 
 // GetBit returns the value of bit at `offset`.
 func (b *Bitmap) GetBit(offset uint64) bool {
-	if offset > b.bitsize {
+	if offset >= b.bitsize {
 		return false
 	}
 	index, bit := offset>>3, offset&7
