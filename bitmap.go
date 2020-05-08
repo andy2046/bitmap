@@ -52,3 +52,12 @@ func (b *Bitmap) GetBit(offset uint64) bool {
 func (b *Bitmap) Size() uint64 {
 	return b.bitsize
 }
+
+func (b *Bitmap) GetBitSets() uint64 {
+	var total uint64
+	for i:=0; i < len(b.data); i++ {
+		total += uint64(bits.OnesCount(uint(b.data[i])))
+	}
+
+	return total
+}
