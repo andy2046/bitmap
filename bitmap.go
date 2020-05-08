@@ -2,7 +2,7 @@
 package bitmap
 
 // MaxBitmapSize is the maximum bitmap size (in bits).
-const MaxBitmapSize uint64 = 0x01 << 40
+const MaxBitmapSize uint64 = 0x01 << 64-1
 
 // Bitmap represents a bitmap.
 type Bitmap struct {
